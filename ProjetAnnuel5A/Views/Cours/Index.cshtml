@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Partage de Cours";
+}
+
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/tiroir-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Partage de cours</span><br />
+            @*<span>@ViewBag.TitleOnPage</span> *@
+        </div>
+       
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+<div style="background-color:#FFF;overflow:auto;width:auto">
+    Espace partage de Cours...
+    Je veux:
+    <ul>
+        <li>@Html.ActionLink("Consulter les cours","Browse","Cours")</li>
+        <li>@Html.ActionLink("Ajouter un nouveau cours", "DocEditor", "Cours")</li>
+        <li>@Html.ActionLink("Rechercher un cours","Find","Cours")</li>
+    </ul>
+
+</div>

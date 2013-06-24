@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Index.cshtml";
+}
+<style type="text/css">
+</style>
+<script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
+ <script type="text/javascript">
+     $('document').ready(function () {
+         init();
+     });
+     function init() {
+         var map, ol_wms;     // (1) instanciation du constructeur
+         map = new OpenLayers.Map('map');
+         // (2) Choix des couches
+         var ol_wms = new OpenLayers.Layer.OSM();
+         // (3) ajout des couches a la carte
+         map.addLayers([ol_wms]);
+         //On zoom au max
+         map.zoomToMaxExtent();
+         map.setCenter(null,15);
+         //map.addControl(new OpenLayers.Control.PanZoomBar());
+         //map.addControl(new OpenLayers.Control.MouseToolbar());
+         //map.addControl(new OpenLayers.Control.LayerSwitcher({ 'ascending': false }));
+         //map.addControl(new OpenLayers.Control.Permalink());
+         //map.addControl(new OpenLayers.Control.Permalink('permalink'));
+         //map.addControl(new OpenLayers.Control.MousePosition());
+
+         //map.addControl(new OpenLayers.Control.KeyboardDefaults());
+     }
+  </script>  
+toto
+<div id="map" style="width:590px; height:400px"></div>  

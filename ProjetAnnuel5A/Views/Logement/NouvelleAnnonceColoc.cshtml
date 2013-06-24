@@ -1,0 +1,471 @@
+﻿     @{
+    ViewBag.Title = "NouvelleAnnonceColoc";
+}
+@Scripts.Render("~/bundles/jqueryui")
+@Styles.Render("~/Content/themes/base/css")
+<style type="text/css">
+    /*.ui-slider-horizontal .ui-state-default {background: white url('/img/icons/32x32/cookie_chocolate.png') no-repeat scroll 50% 50%;}*/
+
+    .profilsRecherches
+    {
+        margin-top:10px;
+        border:1px solid #6A96AA;
+        overflow:auto;
+    }
+
+    .headerprofilsRecherches
+    {
+        background-color:#6A96AA;
+    }
+
+    .pinPartComponents
+    {
+        width:100px;
+        float:left;
+        text-align:center;
+        margin:10px;
+        padding:10px;
+        border:2px solid #6A96AA;
+        height:105px;
+        overflow:auto;
+    }
+    .partContainerLocalisation
+    {
+        border:1px solid #6A96AA;
+        overflow:auto;
+        margin-top:10px
+    }
+     .partContainerComponents
+     {
+          border:1px solid #6A96AA;
+          overflow:auto;
+          margin-top:10px
+     }
+    .partContainerComponentsTitle
+    {
+        background-color:#6A96AA;
+        padding-left:10px;
+       
+    }
+    .partContainerComponentsContent
+    {
+        
+         padding:10px;
+         float:left;
+    }
+    .contentAujColocPers
+    {
+        padding:10px;
+        overflow:auto
+    }
+    .partContainerAutresInformations {
+        margin-top: 10px;
+        display:none;
+    }
+</style>
+<script type="text/javascript">
+    $('document').ready(function () {
+        
+        $('.sliderTrancheAge').slider({
+            range: true,
+            min: 14,
+            max: 100,
+            values: [18, 26],
+            slide: function (event, ui) {
+                $('#valueTrancheAge').html("Entre " + ui.values[0] + " ans et " + ui.values[1] + " ans.");
+            }
+        });
+
+        $('.sliderLoyer').slider({
+           // range: true,
+            min: 0,
+            max: 2000,
+            values: 0,
+            slide: function (event, ui) {
+                $('#valeurLoyer').html(ui.value + " €/mois");
+                
+            }
+        });
+
+        $('#nbPersonnesAujiButton').click(function () {
+            $('.contentAujColocPers').slideUp();
+            $(this).hide();
+            $('.profilsRecherches').show();
+        });
+
+        $('#profilsRecherchesButtonValider').click(function () {
+            $('.contentprofilsRecherches').slideUp();
+            $(this).hide();
+            $('.partContainerComponents').slideDown();
+        });
+
+        $('#validCuisineEquipementButton').click(function () {
+            $('.partContainerComponentsContent').slideUp();
+            $(this).hide();
+            $('.partContainerLocalisation').slideDown();
+        });
+
+        $('#validerLocalisationButton').click(function () {
+            $('.partContainerLocalisationContent').slideUp();
+            $(this).hide();
+            $('.partContainerAutresInformations').slideDown();
+        });
+    });
+
+    function newColoc() {
+        var propCuisine = {
+            "frigo" : $('#frigo').prop('checked'),
+            "microOndes" : $('#mOndes').prop('checked'),
+            "four" : $('#four').prop('checked'),
+            "pCuiss" : $('#pCuiss').prop('checked'),
+            "lvLing" : $('#lvLing').prop('checked'),
+            "sechLing" : $('#sechLing').prop('checked'),
+            "lvVaiss" : $('#lvVaiss').prop('checked'),
+            "congel" : $('#congel').prop('checked'),
+            "grillPain" : $('#grillP').prop('checked'),
+            "mixOutil" : $('#mixOutil').prop('checked'),
+            "cafe" : $('#cafe').prop('checked'),
+            "bouill" : $('#bouill').prop('checked'),
+            "diversUst": $('#diversUst').prop('checked')
+        }
+        var propPieces = {
+            "faut" : $('#faut').prop('checked'),
+            "canape" : $('#canape').prop('checked'),
+            "tablChai" : $('#tablChai').prop('checked'),
+            "tv": $('#tv').prop('checked'),
+            "eqtTv": $('#eqtTv').prop('checked'),
+            "consol": $('#consol').prop('checked'),
+            "eqtAudio": $('#eqtAudio').prop('checked'),
+            "accInternet" : $('#accInternet').prop('checked')
+        }
+        var autresInfos = {
+            "ascenseur":$('#ascenseur').val(),
+            "parkingAuto":$('#parkAuto').val(),
+            "parkingVelo":$('#parkVelo').val()
+        }
+        var annonce = {
+            "actuelHommes": $('#actuelHommes').val(),
+            "actuelFemmes": $('#actuelFemmes').val(),
+            "sexeRecherche": $('#sexeRecherche').val(),
+            "professionRecherche": $('#professionRecherche').val(),
+            "fumeurRecherche": $('#fumeurRecherche').val(),
+            "animauxRecherche": $('#animauxRecherche').val(),
+            "ageMinRecherche" : $('.sliderTrancheAge').slider('values')[0],
+            "ageMaxRecherche": $('.sliderTrancheAge').slider('values')[1],
+            "cuisineJSONContent": JSON.stringify(propCuisine),
+            "autresEquipementsJSONContent": JSON.stringify(propPieces),
+            "autresInfosJSONContent": JSON.stringify(autresInfos),
+            "localisationAdresse": $('#adresse').val(),
+            "localisationVille":$('#ville').val(),
+            "licalisationCodePostal":$('#codepostal').val(),
+            "localisationCoord": $('#coordGeo').val(),
+            "description":$('#descTextAnnonce').val(),
+            "handicap": $('#handicap').val(),
+            "loyer": $('.sliderLoyer').slider('value'),
+        }
+        //APPEL AJAX
+        $.ajax({
+            url: '@Url.Action("CreateColocAnnonce","Logement")',
+            type: 'POST',
+            traditional: true,
+            data: JSON.stringify(annonce),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr) {
+
+                alert('Error : ' + xhr.statusText);
+            },
+            success: function (result) {
+                //CheckIfInvoiceFound(result);
+                alert('c opti pepito !');
+                //alert(result.Titre);
+            },
+            async: true,
+            processData: false
+        });
+    }
+</script>
+<div style="margin-bottom:80px">
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/logement-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Logement</span><br />
+            <span class="sousTitreBulleHaut">Nouvelle annonce colocation</span> 
+        </div>
+       
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+
+<div style="width:auto;overflow:auto;background-color:#FFF">
+<div style="border:1px solid #6A96AA">
+    <div class="partContainerComponentsTitle">
+       <span style="padding-left:5px;padding-right:5px">1/6</span> Etat actuel
+    </div>
+    <div class="contentAujColocPers">
+        <span>Aujourd'hui la colocation est composée de:</span><br />
+        <div style="width:100px;padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px">
+            
+            Hommes:
+            <img src="~/img/Logement/icons/ico-male.png" />
+            <select id="actuelHommes">
+                 <option value="0" selected>0</option>
+                 <option value="1">1</option>
+                 <option value="2">2</option>
+                 <option value="3">3</option>
+                 <option value="4">4</option>
+                 <option value="5">5</option>
+                 <option value="6">6</option>
+            </select>
+        </div>
+        <div style="width:100px;padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px">
+            Femmes:
+            <img src="~/img/Logement/icons/ico-female.png" />
+            <select id="actuelFemmes">
+                 <option value="0" selected>0</option>
+                 <option value="1">1</option>
+                 <option value="2">2</option>
+                 <option value="3">3</option>
+                 <option value="4">4</option>
+                 <option value="5">5</option>
+                 <option value="6">6</option>
+            </select>
+        </div>
+    </div>
+        <input type="button" value="Valider" id="nbPersonnesAujiButton"/>
+</div>
+
+<div class="profilsRecherches" style="display:none">
+    <div class="partContainerComponentsTitle">
+         <span style="padding-left:5px;padding-right:5px">2/6</span>Profils recherchés
+    </div>
+    <div class="contentprofilsRecherches">
+        <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;height:139px">
+            Sexe:<br />
+           <select id="sexeRecherche">
+               <option value="indiff">Indifférent</option>
+               <option value="male">Homme</option>
+               <option value="female">Femme</option> 
+           </select>
+        </div>
+        
+        <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;width:100px;height:139px">
+            <img src="~/img/Logement/icons/ico-profession.png" alt="profession" />
+            Profession : 
+                <select id="professionRecherche">
+                    <option value="indiff" selected>Indifférent</option>
+                    <option value="etudiant">Etudiant</option>
+                    <option value="salarie">Salairé</option>
+                    <option value="retraite">Retraité</option>
+                    <option value="sansEmploi">Sans emploi</option>
+                </select>
+        </div>
+        <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;width:100px;height:139px">
+            <img src="~/img/Logement/icons/ico-cigarette.png" alt="cigarette" />
+            Fumeurs acceptés:
+            <select id="fumeurRecherche">
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>
+            </select>
+
+        </div>
+        <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;width:200px;height:139px">
+            <img src="~/img/Logement/icons/ico-animal.png" alt="animal" /><br />
+            Animaux de compagnie acceptés:
+           <select id="animauxRecherche">
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>
+            </select>
+        </div>
+        <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;width:300px">
+            Tranche d'âge : 
+            <div class="sliderTrancheAge"></div>
+            <div id="valueTrancheAge"></div>
+        </div>
+    </div>
+    <input type="button" value="Valider" id="profilsRecherchesButtonValider"/>
+</div>
+
+
+<div class="partContainerComponents" style="display:none">
+            <div class="partContainerComponentsTitle">
+             <span style="padding-left:5px;padding-right:5px">3/6</span> Electromenager & Cuisine
+            </div>
+            <div class="partContainerComponentsContent">
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-frigo.png" /><br />
+                 <input type="checkbox" id="frigo"/><span style="">Réfrigérateur</span>
+            </div>
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-micro-ondes.png" /><br />
+                 <input type="checkbox" id="mOndes"/><span style="">Micro-ondes</span>
+            </div>
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-four.png" /><br />
+                 <input type="checkbox" id="four"/><span style="">Four</span>
+            </div>
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-plaques.png" /><br />
+                 <input type="checkbox" id="pCuiss"/><span style="">Plaque de cuisson</span>
+            </div>
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-lave-linge.png" /><br />
+                 <input type="checkbox" id="lvLing"/><span style="">Lave linge</span>
+            </div>  
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-lave-linge.png" /><br />
+                 <input type="checkbox" id="sechLing"/><span style="">Sèche linge</span>
+            </div>  
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-lave-vaisselle.png" /><br />
+                 <input type="checkbox" id="lvVaiss"/><span style="">Lave vaisselle</span>
+            </div>  
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-congelateur.png" /><br />
+                 <input type="checkbox" id="congel"/><span style="">Congélateur</span>
+            </div>  
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-grille-pain.png" /><br />
+                 <input type="checkbox" id="grillP"/><span style="">Grille pain</span>
+            </div>  
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-mixeur.png" /><br />
+                 <input type="checkbox" id="mixOutil"/><span style="">Mixeur ou Blender</span>
+            </div> 
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-cafetiere.png" /><br />
+                 <input type="checkbox" id="cafe"/><span style="">Cafetière</span>
+            </div> 
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-boulloire.png" /><br />
+                 <input type="checkbox" id="bouill"/><span style="">Bouilloire</span>
+            </div> 
+            <div class="pinPartComponents">
+                 <img src="~/img/Logement/icons/ico-ustensiles.png" /><br />
+                 <input type="checkbox" id="diversUst"/><span style="">Divers ustensiles</span>
+            </div>  
+            </div>
+           
+        </div>
+
+
+            <div class="partContainerComponents" style="display:none">
+            <div class="partContainerComponentsTitle">
+             <span style="padding-left:5px;padding-right:5px">4/6</span> Autres équipements
+            </div>
+            <div class="partContainerComponentsContent">
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-fauteil.png" /><br />
+                     <input type="checkbox" id="faut"/><span style="">Fauteuils</span>
+                </div>
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-canape.png" /><br />
+                     <input type="checkbox" id="canape"/><span style="">Canapé</span>
+                </div>
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-table-chaises.png"/><br />
+                     <input type="checkbox" id="tablChai"/><span style="">Table & Chaises</span>
+                </div>
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-tv.png"/><br />
+                     <input type="checkbox" id="tv"/><span style="">TV</span>
+                </div>
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-eqt-tv.png"/><br />
+                     <input type="checkbox" id="eqtTv"/><span style="">Equipements TV</span>
+                </div>
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-manette.png"/><br />
+                     <input type="checkbox" id="consol"/><span style="">Console de jeux</span>
+                </div>
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-eqt-audio.png"/><br />
+                     <input type="checkbox" id="eqtAudio"/><span style="">Equipement Audio</span>
+                </div>
+                <div class="pinPartComponents">
+                     <img src="~/img/Logement/icons/ico-internet.png"/><br />
+                     <input type="checkbox" id="accInternet"/><span style="">Accès internet</span>
+                </div>
+            </div>
+                <input type="button" id="validCuisineEquipementButton" value="Valider"/>
+            </div>
+
+            <div class="partContainerLocalisation" style="display:none">
+                <div class="partContainerComponentsTitle">
+                <span style="padding-left:5px;padding-right:5px">5/6</span>Localisation
+                </div>
+                <div class="partContainerLocalisationContent">
+                    
+                    @Html.Partial("geoloc")
+                </div>
+
+                
+        
+            </div>
+
+            <div class="partContainerAutresInformations">
+                <div class="partContainerComponentsTitle">
+                    <span style="padding-left:5px;padding-right:5px">6/6</span> Autres informations
+                </div>
+                <div class="partContainerOInformationsContent">
+                <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;height:139px">
+                    <img src="~/img/Logement/icons/ico-ascenceur.png" /><br />     
+                         Ascenseur:<br />
+                    <select id="ascenseur">
+                       <option value="oui">oui</option>
+                       <option value="non">non</option>
+                   </select>
+                </div>
+                
+
+                    <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;height:139px">
+                        <img src="~/img/Logement/icons/ico-handi.png" /><br /> 
+                         Accès handicapé:<br />
+                    <select id="handicap">
+                       <option value="oui">oui</option>
+                       <option value="non">non</option>
+                   </select>
+                </div>
+                  
+                    <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;height:139px">
+                        <img src="~/img/Logement/icons/ico-voiture.png" /><br /> 
+                        Parking:<br />
+                    <select id="parkAutos">
+                       <option value="oui">oui</option>
+                       <option value="non">non</option>
+                   </select>
+                </div>
+                   
+                    <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;height:139px">
+                        <img src="~/img/Logement/icons/ico-velo.png" /><br /> 
+                        Garage à velo:<br />
+                    <select id="parkVelo">
+                       <option value="oui">oui</option>
+                       <option value="non">non</option>
+                   </select>
+                </div> 
+                <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;height:139px;width:180px">
+                        <span>Loyer:</span>
+                          <div class="sliderLoyer"></div><br />
+                        <span id="valeurLoyer">0€/mois</span>
+                   
+                </div> 
+                <div style="padding:10px;border:2px solid #6A96AA;text-align:center;float:left;margin:10px;height:139px;width:180px">
+                        <span>Description annonce:</span>
+                        <textarea id="descTextAnnonce" style="width:auto">
+                            Décrivez ici votre annonce...
+                        </textarea>
+         
+                </div>        
+                </div>
+                <input type="button" value="submitAnnonce" />
+            </div>
+</div>
+ @Html.Partial("Menu/Menu")

@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "RegisterUserForm_Partial";
+}
+@Styles.Render("~/Content/home/css")
+@Scripts.Render("~/Scripts/unlog")
+@Scripts.Render("~/Scripts/bpopup")
+@*<script type="text/javascript" src="/Scripts/Home/unlogged/jquery.bpopup.min.js"></script>*@
+
+<div class="home">
+    <div class="top">
+		<div class="contentTop">
+			<img src="../img/Shared/logo-big.jpg"/>
+			@*<div class="logginContent">	
+                <div class="ligneLogin">
+                    <span>Login:</span>
+                    <input type="password" />
+                </div>
+                <div class="ligneLogin">
+                    <span>Password:</span>
+                    <input type="password" />
+                </div>
+                <div class="ligneLogin">
+                    <input type="checkbox" />
+                    <span>Se souvenir de moi</span>
+                    
+                </div>
+                <input type="button" value="connexion" /><br />
+                <input type="button" value="inscription" id="butCallRegister" />
+            
+			</div>*@
+             @Html.Partial("UnLogged/Authentification");
+		</div>	
+	</div>
+	<div class="middle">
+		<div class="bannerTop">
+            <ul id="anims">
+	            <li style="font-size:28px">Partage de cours</li>
+	            <li style="font-size:28px">Colocation</li>
+                <li style="font-size:28px">Covoiturage</li>
+	            <li style="font-size:28px">Projets étudiants</li>
+	            <li>Elargissez vos connaissances</li>
+                <li></li>
+	        </ul>
+			@*<span class="chaineBanner">Chaine de Presentation</span>*@
+		</div>
+		<div class="slider">
+            <div id="banner-slide" >
+                <ul class="bjqs">
+                  <li><img src="../img/Home/slider/1.jpg" title="Test texte intro 1"></li>
+                  <li><img src="../img/Home/slider/2.jpg" title="Test texte intro 2"></li>
+                  <li><img src="../img/Home/slider/3.jpg" title="Test texte intro 3"></li>
+                  <li><img src="../img/Home/slider/4.jpg" title="Test texte intro 4"></li>
+                </ul>
+            </div>
+		</div>
+	</div>
+	<div class="bottom">
+		
+	</div>
+</div>
+
+<style>
+    .contentPopupInscription
+    {
+        background-color:white;
+    }
+</style>
+
+<div style="display:none">
+    <div class="contentPopupInscription">
+       
+    </div>
+</div>

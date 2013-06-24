@@ -1,0 +1,23 @@
+﻿@model ProjetAnnuel5A.Models.LoginModel
+@{
+    ViewBag.Title = "Authentification";
+}
+
+<div class="logginContent">     
+    <div class="ligneLogin">
+        <span>@Html.LabelFor(m =>m.Email) </span>
+        @Html.TextBoxFor(m => m.Email)
+    </div>
+    <div class="ligneLogin">
+        <span>@Html.LabelFor(m => m.Password)</span>
+        @Html.TextBoxFor(m => m.Password)
+    </div>
+    <div class="ligneLogin">
+        <input type="checkbox" />
+        <span>Se souvenir de moi</span>
+                    
+    </div>
+    @Html.ActionLink("Connexion", "Login", "Account", routeValues: null, htmlAttributes: new { id = "LoginLink" })
+    @Html.ActionLink("Inscription", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+    @*<input type="button" value="inscription" id="butCallRegister" />*@
+</div>

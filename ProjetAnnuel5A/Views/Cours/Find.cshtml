@@ -1,0 +1,159 @@
+﻿@{
+   ViewBag.TitleOnPage = "Recherche de cours";
+}
+<style type="text/css">
+    input[type="text"] {
+        border: 1px solid #6A96AA;
+        width: 500px;
+        height: 20px;
+        font-size: 0.5em;
+    }
+    .tempProgressBarResults
+    {
+        display:none;
+        text-align:center
+    }
+    .lineCoursDisplay
+    {
+        width:450px;
+        float:left;
+        border:1px solid black;
+        padding:10px;
+        margin:10px;
+        overflow:auto;
+    }
+    .titleCours
+    {
+        padding-left:10px;
+        float:left;
+        width:350px;
+        color: #6A96AA;
+        font-size: 1.5em;
+    }
+    .votePourCours
+    {
+        width:50px;
+        float:right;
+        color:green;
+    }
+    .voteContreCours
+    {
+        width:50px;
+        float:right;
+        color: red;
+    }
+    .themeCours
+    {
+        color:#ff6a00;
+        padding-left:10px;
+        float:left;
+        width: 350px
+    }
+</style>
+<script type="text/javascript">
+    $('document').ready(function () {
+
+        $('#searchExpressCours').keypress(function(e) {
+            if(e.which == 13) {
+                $('#searchCours').click();
+            }
+        });
+
+        $('#searchCours').click(function () {
+          //  alert($('#searchExpressCours').val());
+            $('.tempProgressBarResults').show();
+            $.ajax({
+                url: '@Url.Action("BrowseByTitlePattern","Cours")',
+                    type: 'POST',
+                    traditional: true,
+                    data: JSON.stringify({ titlePartial: $('#searchExpressCours').val() }),
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    error: function (xhr) {
+
+                        alert('Error : ' + xhr.statusText);
+                    },
+                    success: function (data) {
+                        $('.tempProgressBarResults').hide();
+                        $('#listOfResults').html('');
+                        if (!jQuery.isEmptyObject(data)) {
+                            renderResultsFromSearch(jQuery.parseJSON(data).listCours);
+                        }
+                    },
+                    error:function(){
+                        alert("Erreur");
+                    },
+                    async: true,
+                    processData: false
+                });
+        });
+    });
+    function renderResultsFromSearch(listOfResults) {
+        
+        $('#numberResults').text('Nombre de résultats : ' + listOfResults.length);
+        for (var cpt = 0; cpt < listOfResults.length; cpt++) {
+            var maLigne = $('.lineCours').clone();
+            maLigne.removeClass('lineCours');
+            maLigne.addClass('lineCoursDisplay');
+            maLigne.find('.themeCours').text(listOfResults[cpt].theme);
+            if (listOfResults[cpt].nom.length > 30) {
+                maLigne.find('.titleCours').text(listOfResults[cpt].nom.substring(0, 30)+'...');
+            }
+            else {
+                maLigne.find('.titleCours').text(listOfResults[cpt].nom);
+            }
+            
+            maLigne.find('#coursLink').attr("href", "/cours/Display?coursID=" + listOfResults[cpt].id);
+            maLigne.find('.imgDisplay').attr('src', listOfResults[cpt].urlIcon);
+            $('#listOfResults').append(maLigne.show());
+        }
+    }
+</script>
+
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/find-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Partage de cours</span><br />
+            <span class="sousTitreBulleHaut">Rechercher un cours</span> 
+        </div>
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+
+</div >
+
+<div style="background-color:#FFF;overflow:auto;width:auto;margin-bottom:80px">
+    <div style="border-bottom:2px solid #6A96AA;text-align:center;font-size: 2em;padding:5px;">
+        <input type="text" id="searchExpressCours" />
+        
+            <img src="~/img/icons/32x32/jumelles.png" alt="Rechercher" style="vertical-align:bottom;cursor:pointer" id="searchCours"/>
+            
+    
+        @*<input type="button" value="rechercher" id="searchCours" />*@
+       @* @ViewBag.displayedCours.titre*@
+    </div>
+    <div class="tempProgressBarResults">
+        <img src="~/img/Cours/ajax-loader.gif" alt="chargement"/>
+    </div>
+    <div id="findResults">
+        <div id="numberResults"></div>
+    </div>
+    <div id="listOfResults">
+
+    </div>
+    <div class="lineCours" style="display:none">
+        <img src="#" width="90" height="90" style="float:left" class="imgDisplay"/>
+        <div class="titleCours"></div>
+        <div class="themeCours"></div>
+        <a href="#"style="float:left" id="coursLink"><span style="background-color:#6A96AA;color:#FFF;cursor:pointer;margin-left:10px">Consulter le cours</span></a>
+        
+    </div>
+
+</div>
+
+@Html.Partial("Menu/Menu")

@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Private";
+}
+
+<style type="text/css">
+    .line
+    {
+        border-top:1px solid #6A96AA;
+        height: 20px;
+        padding : 5px;
+        margin : 5px;
+    }
+    
+</style>
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/tiroir-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Partage de cours</span><br />
+            <span class="sousTitreBulleHaut">Espace personnel</span> 
+        </div>
+       
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+<div style="background-color:#FFF;overflow:auto;width:auto">
+
+<style type="text/css">
+    .contentListCoursTheme
+    {
+        margin : 10px;
+    }
+    .lineCours
+    {
+        background-color:rgb(214, 214, 214);
+        border-bottom:1px solid #6A96AA;
+        margin-top:10px;
+        padding:10px;
+        font-size:1.2em;
+        overflow:auto;
+    }
+</style>
+    <div class=" lineCours" >
+         <div style="width:600px;float:left;padding-left:26px;text-align:center">Nom du cours</div>
+         <div style="width:50px;float:left;padding-left:15px;text-align:center">Votes pour</div>
+         <div style="width:50px;float:left;padding-left:15px;text-align:center">Votes contre</div>
+         <div style="width:50px;float:left;padding-left:15px;text-align:center">Modifier</div>
+         <div style="width:50px;float:left;padding-left:15px;text-align:center">Supprimer</div>
+    </div>
+<div class="contentListCoursTheme">
+     @foreach (var item in ViewBag.listPerso)
+     {
+         <div class="lineCours" >
+             <div style="float:left"><img src="~/img/icons/16x16/page.png" /></div>
+             <a href="/Cours/Display?coursID=@item.id" id="linktoDoc"><div style="width:600px;float:left;padding-left:10px;text-align:center" id="titreCours">@item.nom</div></a>
+             <div style="width:50px;float:left;padding-left:10px;color:green;text-align:center" id="votesCoursPour">@item.votesPour</div>
+             <div style="width:50px;float:left;padding-left:10px;color:red;text-align:center" id="votesCoursContre"> @item.votesContre</div>
+             <div style="width:50px;float:left;padding-left:10px;text-align:center" class="modifCours" coursID="@item.id"><img src="~/img/icons/16x16/edition-doc-icone.png" alt="modifier" style="cursor:pointer;margin-left:auto;margin-right:auto"/></div>
+             <div style="width:65px;float:left;padding-left:10px;text-align:center" class="supprCours" coursID="@item.id"><img src="~/img/icons/16x16/corbeille-icone.png" alt="supprimer" style="cursor:pointer;margin-left:auto;margin-right:auto"/></div>
+         </div>
+     }
+</div>
+    
+
+</div>
+
+<script type="text/javascript">
+    $('document').ready(function () {
+        $('.supprCours').click(function () {
+            if (confirm("Supprimer le document")) {
+                $.ajax({
+                    url: '@Url.Action("deleteCours","Cours")',
+                      type: 'POST',
+                      traditional: true,
+                      data: JSON.stringify({ coursID: $(this).attr('coursID') }),
+                      dataType: 'json',
+                      contentType: 'application/json; charset=utf-8',
+                      error: function (xhr) {
+                            alert('Error : ' + xhr.statusText);
+                        },
+                        success: function (data) {
+                            if (!data.success) {
+                                alert("Erreur");
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function () {
+                            alert("Erreur");
+                        },
+                        async: true,
+                        processData: false
+                  });
+            }
+        });
+
+        $('.modifCours').click(function () {
+            window.location = "/Cours/DocChange?doc=" + $(this).attr("coursID") ;
+        });
+    });
+
+
+
+</script>
+
+
+
+
+
+@Html.Partial("Menu/Menu")

@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Display";
+}
+<script type="text/javascript">
+    $('document').ready(function () {
+        $('#typeOfSearch').change(function (id) {
+            if($('#typeOfSearch').val()=="coloc")
+            {
+                $('#findColocationPref').slideDown();
+                $('#findLocationPref').slideUp();
+            }
+            else
+            {
+                $('#findColocationPref').slideUp();
+                $('#findLocationPref').slideDown();
+            }
+        });
+
+    });
+</script>
+
+
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/bibliotheque-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span>Logement</span><br />
+            <span>Recherche de colocation</span> 
+        </div>
+       
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+<div style="background-color:#FFF;overflow:auto;width:auto">
+    <div>
+        Ville: <input type="text" />
+    </div>
+   Type de recherche:
+    <select id="typeOfSearch">
+        <option value="coloc">Colocation</option>
+        <option value="loc">Location</option>
+    </select>
+
+    <div id="findColocationPref" style="display:none">
+        Votre profil:
+        Sexe:
+        <select id="sexeColoc">
+            <option value="homme">Homme</option>
+            <option value="femme">Femme</option>
+        </select>
+        //AUTOCOMPLETE AGE
+    </div>
+    <div id="findLocationPref" style="display:none">
+        loc
+    </div>
+</div>
+
+
+@Html.Partial("Menu/Menu")

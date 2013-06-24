@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Menu";
+}
+@Scripts.Render("~/bundles/jqueryui")
+<script type="text/javascript">
+    $('document').ready(function () {
+        $('#espacePerso').mouseenter(function () {
+
+        });
+    });
+
+</script>
+<style type="text/css">
+    #extraDiv
+    {
+        /*background-color:green;*/
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 80px;
+        width: 1000px;
+        position: fixed;
+        bottom: 0px;
+        z-index: 5;
+        
+    }
+    .contentExtra
+    {
+        margin:0px auto;
+        text-align:center;
+    }
+    .buttonIcon
+    {
+        cursor:pointer;
+    }
+    a {
+        text-decoration: none;
+    }
+</style>
+<div id="extraDiv">
+   <div class="contentExtra">
+       <a href="@Url.Action("Find","Logement")">
+         <img src="~/img/icons/64x64/find-icone.png" alt="Rechercher" id="finderCours" class="buttonIcon"/>
+    </a>
+    <a href="@Url.Action("Private","Logement")">
+         <img src="~/img/icons/64x64/tiroir-icone.png" alt="Espace personnel" id="espacePerso" class="buttonIcon"/>
+    </a>
+    <a href="@Url.Action("Map","Logement")">
+         <img src="~/img/icons/64x64/bibliotheque-icone.png" alt="Parcourir" class="buttonIcon"/>
+    </a>
+    <a href="@Url.Action("NouvelleAnnonceColoc","Logement")">
+         <img src="~/img/icons/64x64/ajoutColocation-icone.png" alt="Ecrire nouveau" class="buttonIcon"/>
+    </a>
+   </div>
+</div>

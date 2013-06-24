@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "DeposerAnnonceLogement";
+}
+<style>
+    .errorInput
+    {
+        border: 1px solid red;
+    }
+    input[type="text"] {
+        border: 1px solid #6A96AA;
+    }
+</style>
+<script src="http://openlayers.org/api/OpenLayers.js" charset="utf-8"></script>
+<script type="text/javascript" >
+    var map;
+    $('document').ready(function () {
+        
+        
+
+        
+
+        $('#validCoordAnnonce').click(function () {
+            if (validFieldsAdresse())
+            {
+                init();
+                geolocate(trimChaineSpacePlus($('#adresse').val()), trimChaineSpacePlus($('#codepostal').val()), trimChaineSpacePlus($('#ville').val()));
+                $('#mapInfos').slideDown();
+                $('#validerLocalisationButton').slideDown();
+               // $(this).hide('fast');
+            }
+           
+        });
+        
+    });
+
+     function validFieldsAdresse() {
+        $('#adresse').removeClass('errorInput');
+        $('#codepostal').removeClass('errorInput');
+        $('#ville').removeClass('errorInput');
+        if ($('#adresse').val().length < 6)
+        {
+            $('#adresse').addClass('errorInput');
+            return false;
+        }
+        if ($('#ville').val().length< 3) {
+            $('#ville').addClass('errorInput');
+            return false;
+        }
+        if ($('#codepostal').val().length != 5) {
+            $('#codepostal').addClass('errorInput');
+            return false;
+        }
+        return true;
+
+    }
+    function trimChaineSpacePlus(chaine)
+    {
+        var result = chaine.split(' ').join('+');
+        return result;
+    }
+    function init() {
+       
+        if (map != null) {
+            $('#map').slideUp('fast');
+            map.destroy();
+            $('#validerLocalisationButton').slideUp('fast');
+        }
+       
+        $('#map').slideDown('fast', function () {
+            map = new OpenLayers.Map('map');
+            map.addLayer(new OpenLayers.Layer.OSM());
+            var center = new OpenLayers.LonLat(30000, 5800000);
+            map.setCenter(center, 5);
+        });
+        
+        //clone().addClass('.displayed')
+        }
+        
+        function geolocate(adresse,codePostal,ville){
+            $.ajax({
+                type: 'GET',
+                url: 'http://nominatim.openstreetmap.org/search?q='+adresse+'+'+codePostal+'+'+ville+'&countrycodes=fr&addressdetails=1&format=json&limit=1',
+                dataType: 'json',
+            
+                success: function (data) {
+                    //console.log(data);
+
+                    if (!jQuery.isEmptyObject(data)) {
+                        $('#coordGeo').html(data[0].lon + "," + data[0].lat);
+                        var vectors = new OpenLayers.Layer.Vector("Vector Layer");
+                        var point = new OpenLayers.LonLat(data[0].lon, data[0].lat).transform(
+                            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                            map.getProjectionObject() // to Spherical Mercator Projection
+                          );
+                        var monPoint = new OpenLayers.Geometry.Point(point.lon, point.lat);
+                        
+                        vectors.addFeatures([new OpenLayers.Feature.Vector(monPoint)]);
+
+                        var drag = new OpenLayers.Control.DragFeature(vectors, {
+                            autoActivate: true,
+                            onComplete: function () {
+                                var myPoint = new OpenLayers.Geometry.Point(vectors.features[0].geometry.getVertices()[0].x,
+                                      vectors.features[0].geometry.getVertices()[0].y);
+                                console.log(myPoint);
+                                var myLatLonPoint = myPoint.transform(map.getProjectionObject(), new OpenLayers.Projection("EPSG:4326"));
+                                $('#coordGeo').html(myPoint.x + "," + myPoint.y);
+                               // alert(myPoint.x + " " + myPoint.y);
+                            }
+                        });
+                        map.addLayer(vectors);
+                        map.addControl(drag);  
+                        map.setCenter(point, 17);
+                    }
+                    else
+                    {
+                        if (map != null)
+                        {
+                            map.destroy();
+                            $('#map').slideUp('fast');
+                            $('#mapInfos').hide('fast');
+                            $('#validerLocalisationButton').hide('fast');
+                        }
+                        
+                        alert("Erreur sur l'adresse");
+                    }
+                }
+            });
+        }
+            
+   
+</script>
+
+
+
+
+<div style="border:2px solid #6A96AA ; margin: 10px; padding: 10px;">
+    <div style="overflow:auto">
+        <div style="width:90px; float:left">Adresse:</div> <input type="text" id="adresse" style="float:left" value="74 rue de la sabliere"/>
+    </div><br />
+     <div style="overflow:auto">
+    <div style="width:90px; float:left">Ville:</div> <input type="text" id="ville" style="float:left" value="palaiseau" /><br />
+    </div><br />
+    <div style="overflow:auto">
+     <div style="width:90px; float:left">Code Postal:</div><input type="text" id="codepostal" style="float:left" value="91120"/><br />
+     </div><br />
+    <input type="button" value="Géolocaliser" id="validCoordAnnonce" /><br />
+    <span style="display:none" id="coordGeo"></span>
+    <div style="" id="contentMap">
+        <div id="map" style=" width: auto;height: 400px; background-color:black;display:none; "></div>
+        <div id="mapInfos" style="display:none">Déplacez le curseur pour affiner la position</div>
+        <input type="button" value="Valider la localisation" id="validerLocalisationButton" style="display:none"/>
+    </div>
+</div>

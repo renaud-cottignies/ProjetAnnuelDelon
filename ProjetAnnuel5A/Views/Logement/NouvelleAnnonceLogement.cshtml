@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "NouvelleAnnonceLogement";
+}
+@Scripts.Render("~/bundles/jqueryui")
+@Styles.Render("~/Content/themes/base/css")
+<style type="text/css">
+    .attribute
+    {
+        border:2px solid #6A96AA;
+        margin:10px;
+        padding:5px
+    }
+</style>
+
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/logement-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Logement</span><br />
+            <span class="sousTitreBulleHaut">Nouvelle annonce location</span> 
+        </div>
+       
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+<div style="margin-bottom:80px;background-color:#FFF">
+    <div class="partContainerLocalisation" >
+                <div class="partContainerComponentsTitle" style="background-color:#6A96AA">
+                <span style="padding-left:5px;padding-right:5px">1/2</span>Localisation
+                </div>
+                <div class="partContainerLocalisationContent" >         
+                    @Html.Partial("geoloc")
+                </div>
+
+              
+     </div>
+    <div class="partContainerInfosLogement" style="margin-top:10px;display:none">
+      <div class="partContainerComponentsTitle" style="background-color:#6A96AA">
+                <span style="padding-left:5px;padding-right:5px">2/2</span>Informations
+      </div>
+      <div class="partContainerDescription" >
+          <div class="attribute" style="overflow:auto">
+              <span style="padding-right:10px;float:left">Type de logement:</span>
+              <select id="typeOflogement">
+                  <option value="appartement">Appartement</option>
+                  <option value="maison">Maison</option>
+              </select>
+          </div>
+
+          <div class="attribute" style="overflow:auto">
+              <span style="padding-right:10px;float:left">Nombre de pièces:</span>
+              <select id="nbrPieces">
+                  <option value="-1">Studio</option>
+                  <option value="1" selected>1</option>
+                  <option value="2" >2</option>
+                  <option value="3" >3</option>
+                  <option value="4" >4</option>
+                  <option value="5" >5</option>
+              </select>
+          </div>
+          
+          <div class="attribute" style="overflow:auto">
+              <span style="padding-right:10px;float:left">Surface:</span>
+              <div id="sliderSurface" style="width:500px;float:left"></div>
+              <span id="surface" style="float:left;padding-left:10px">0 m²</span>
+          </div>
+        
+
+
+          <div class="attribute" style="overflow:auto">
+              <span style="padding-right:10px;float:left">Loyer:</span>
+              <div id="sliderLoyer" style="width:500px;float:left"></div>
+              <span id="loyer" style="float:left;padding-left:10px">0 €/mois</span>
+          </div>
+
+          <div class="attribute" style="overflow:auto">
+              <span style="padding-right:10px;float:left">Logement meublé:</span>
+              <select id="meuble">
+                  <option value="oui">Oui</option>
+                  <option value="non">Non</option>
+              </select>
+          </div>
+
+          <div class="attribute" style="overflow:auto">
+              <span style="padding-right:10px;float:left">Accessibilitée handicapés:</span>
+              <select id="handiAccess">
+                  <option value="oui">Oui</option>
+                  <option value="non">Non</option>
+              </select>
+          </div>
+
+          <div class="attribute" style="overflow:auto">
+              <span style="padding-right:10px;float:left">Description:</span>
+              <textarea>Décrivez ici le logement</textarea>
+              
+          </div>
+      </div>
+    </div>
+    @Html.Partial("Menu/Menu")
+</div>
+
+<script type="text/javascript">
+    $('document').ready(function () {
+        $('#sliderSurface').slider({
+            min: 0,
+            max: 300,
+            values: 0,
+            slide: function (event, ui) {
+                $('#surface').html(ui.value + " m²");
+
+            }
+        });
+
+        $('#sliderLoyer').slider({
+            min: 0,
+            max: 3000,
+            values: 0,
+            slide: function (event, ui) {
+                $('#loyer').html(ui.value + " €/mois");
+
+            }
+        });
+        $('#validerLocalisationButton').click(function () {
+            $('.partContainerLocalisationContent').slideUp();
+            $(this).hide();
+            $('.partContainerInfosLogement').slideDown();
+        });
+
+    });
+    function validAndSendDatas() {
+        var annon = {
+            "localisationAdresse": $('#adresse').val(),
+            "localisationVille": $('#ville').val(),
+            "licalisationCodePostal": $('#codepostal').val(),
+            "localisationCoord": $('#coordGeo').val(),
+
+        };
+
+
+    }
+</script>

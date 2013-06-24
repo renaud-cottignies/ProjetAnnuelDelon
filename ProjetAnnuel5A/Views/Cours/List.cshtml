@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "Liste des cours";
+    ViewBag.TitleOnPage = "Liste des cours";
+    
+}
+
+<script type="text/javascript">
+    var listOfCours;
+
+    $('document').ready(function () {
+        //Recuperer liste des cours
+        $.ajax({
+            url: '@Url.Action("getAllCoursFromTheme","Cours")',
+            type: 'POST',
+            traditional: true,
+            data: JSON.stringify({ themeID: @ViewBag.themeid+'' }),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr) {
+                alert('Error : ' + xhr.statusText);
+            },
+            success: function (data) {
+                listOfCours = jQuery.parseJSON(data).listCours;
+                listCoursWithoutFilter();
+            },
+            error: function () {
+                alert("Erreur");
+            },
+            async: true,
+            processData: false
+        });
+
+
+        /*Change index niveau selected*/
+        $('select[name=levelSelector]').change(function () {
+            if ($(this).val() == '-1') {
+                listCoursWithoutFilter();
+            }
+            else {
+                var listeDeCours = filterElementsToShow($(this).val());
+
+                $('.contentListCoursTheme').text('');
+                for (var cptC = 0; cptC < listeDeCours.length; cptC++) {
+                    var cours = $('.lineCoursToCopy').clone().show();
+                    cours.removeClass('lineCoursToCopy');
+                    cours.find('#titreCours').text(listeDeCours[cptC].titre);
+                    cours.find('#linktoDoc').attr('href', '/Cours/Display?coursID=' + listeDeCours[cptC].idCours);
+                    cours.find('#votesCoursPour').text(listeDeCours[cptC].votesPour);
+                    cours.find('#votesCoursContre').text(listeDeCours[cptC].votesContre);
+
+                    if (listeDeCours[cptC].votesPour + listeDeCours[cptC].votesContre == 0) {
+                        cours.find('#votesCoursResultat').text("- % ");
+                    }
+                    else {
+                        var prctCours = ((listeDeCours[cptC].votesPour) / (listeDeCours[cptC].votesPour + listeDeCours[cptC].votesContre)) * 100;
+                        cours.find('#votesCoursResultat').text(prctCours + " % ");
+                    }
+
+                    $('.contentListCoursTheme').append(cours);
+
+                }
+            }
+        });
+
+    });
+
+    function filterElementsToShow(levelID) {
+        var result = new Array();
+        for (var cpt = 0; cpt < listOfCours.length; cpt++) {
+            if (listOfCours[cpt].levelId==levelID)
+                result.push(listOfCours[cpt]);
+        }
+        return result;
+    }
+
+    function listCoursWithoutFilter() {
+        $('.contentListCoursTheme').text('');
+        for (var cptC = 0; cptC < listOfCours.length; cptC++) {
+            var cours = $('.lineCoursToCopy').clone().show();
+            cours.removeClass('lineCoursToCopy');
+            cours.find('#titreCours').text(listOfCours[cptC].titre);
+            cours.find('#linktoDoc').attr('href', '/Cours/Display?coursID=' + listOfCours[cptC].idCours);
+            cours.find('#votesCoursPour').text(listOfCours[cptC].votesPour);
+            cours.find('#votesCoursContre').text(listOfCours[cptC].votesContre);
+
+            if (listOfCours[cptC].votesPour + listOfCours[cptC].votesContre == 0) {
+                cours.find('#votesCoursResultat').text("- % ");
+            }
+            else {
+                var prctCours = ((listOfCours[cptC].votesPour) / (listOfCours[cptC].votesPour + listOfCours[cptC].votesContre)) * 100;
+                cours.find('#votesCoursResultat').text(prctCours + " % ");
+            }
+
+            $('.contentListCoursTheme').append(cours);
+        }
+    
+    }
+
+</script>
+
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="@ViewBag.iconThemeGeneral" style="float:left;padding-right:10px" height="64" width="68" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Partage de cours</span><br />
+            <span class="sousTitreBulleHaut">@ViewBag.TitleOnPage</span> 
+        </div>
+       
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+<div style="background-color:#FFF;overflow:auto;width:auto">
+    <div style="border-bottom:2px solid #6A96AA;padding:10px;text-align:center">
+           <h2 style="color:#6A96AA">@ViewBag.Theme</h2>
+    </div>
+     Filter par niveau : 
+        <select name="levelSelector">
+            <option value="-1">-</option>
+            @foreach (var item in ViewBag.listNiveaux)
+            {
+                <option value="@item.niveauID">@item.niveauName</option>
+            }
+        </select>    
+<!-- Nom du theme-->
+
+<style type="text/css">
+    .contentListCoursTheme
+    {
+        margin : 10px;
+        
+        
+    }
+    .lineCours
+    {
+        background-color:rgb(214, 214, 214);
+        border-bottom:1px solid #6A96AA;
+        margin-top:10px;
+        padding:10px;
+        font-size:1.2em;
+        overflow:auto;
+    }
+</style>
+    <div class=" lineCours" >
+         <div style="width:600px;float:left;padding-left:26px;text-align:center"> Nom du cours</div>
+         <div style="width:50px;float:left;padding-left:10px">Votes pour</div>
+         <div style="width:50px;float:left;padding-left:10px">Votes contre</div>
+         <div style="width:50px;float:left;padding-left:10px">Note</div>
+    </div>
+<div class="contentListCoursTheme">
+    
+</div>
+    <div class="lineCoursToCopy lineCours" style="display:none">
+         <div style="float:left"><img src="~/img/icons/16x16/page.png" /></div>
+         <a href="#" id="linktoDoc"><div style="width:600px;float:left;padding-left:10px;text-align:center" id="titreCours"></div></a>
+         <div style="width:50px;float:left;padding-left:10px;color:green" id="votesCoursPour"></div>
+         <div style="width:50px;float:left;padding-left:10px;color:red" id="votesCoursContre"></div>
+         <div style="width:50px;float:left;padding-left:10px" id="votesCoursResultat"></div>
+    </div>
+
+</div>
+@Html.Partial("Menu/Menu")

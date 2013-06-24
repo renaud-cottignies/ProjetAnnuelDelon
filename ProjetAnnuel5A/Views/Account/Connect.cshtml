@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Connect";
+}
+
+<h2>Connect</h2>
+<script type="text/javascript">
+    $('document').ready(function () {
+        
+        $('#lostPwdButton').click(function () {
+            $('.connectSection').slideUp();
+            $('.lostPwdSection').slideDown();
+        });
+
+
+
+
+        $('#connectButton').click(function () {
+            alert('je veux me connecter !');
+            var user = {
+                    login: $('#connectLogin').val(),
+                    password: $('#connectPassword').val()
+            };
+          $.ajax({
+            url: '@Url.Action("Login","Account")',
+            type: 'POST',
+            traditional: true,
+            data: JSON.stringify({ user: $('#connectLogin').val(), password: $('#connectPassword').val()}),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            error: function (xhr) {
+
+                alert('Error Connexion: ' + xhr.statusText);
+            },
+            success: function (result) {
+
+                alert('c opti pepito CONNEXION!');
+            },
+            async: true,
+            processData: false
+        });
+        });
+       
+    });
+</script>
+USERID :
+
+
+@if (@Session["userId"] != null)
+{
+    <span>CONNECTE</span>
+}
+else
+{
+    <span>BOLOSS</span>
+}
+<br />
+<div class="connectSection">
+    Adresse mail :<input type="text" id="connectLogin"/><br />
+    Mot de passe:<input type="password" id="connectPassword"/><br />
+    <input type="button" value="Connexion" id="connectButton"/>
+    <input type="button" value="Mot de passe perdu" id="lostPwdButton" />
+</div>
+
+<style type="text/css">
+    .lostPwdSection
+    {
+        display:none
+    }
+</style>
+ 
+<div class="lostPwdSection">
+    Votre adresse mail : <input type="text" id="mailLostPwd" /><br />
+    <input type="button" value="Valider" id="SearchLostPwdButton"/>
+
+</div>
+

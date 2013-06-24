@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Display";
+}
+
+
+
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/bibliotheque-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Partage de cours</span><br />
+            <span class="sousTitreBulleHaut">Consulter un cours</span> 
+        </div>
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+<div style="background-color:#FFF;overflow:auto;width:auto">
+    <div style="border-bottom:2px solid #6A96AA;text-align:center;font-size: 2em;padding:5px;">
+        @ViewBag.displayedCours.titre
+    </div>
+
+@Html.Raw(@ViewBag.displayedCours.contenu)
+
+</div>
+
+@Html.Partial("Menu/Menu")

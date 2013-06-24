@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <style type="text/css">
+        .centerColumnBody
+        {
+            margin-left:auto;
+            margin-right:auto;
+            width:1000px;
+            
+        }
+        .centerHead
+        {
+            width:100%;
+            height:100px;
+            
+            padding-top:10px;
+            padding-bottom:10px;
+        }
+        .centerHeadContent
+        {
+            width:100%;
+            height:100%;
+            background-color:green;
+            margin-top:10px;
+            margin-bottom:10px;
+        }
+
+        .centerHeadMenu
+        {
+            width:100%;
+            height:5px;
+            
+            margin-top:10px;
+            padding-bottom:20px;
+        }
+        .centerHeadMenuContent
+        {
+            width:100%;
+            height:100%;
+            background-color:#6A96AA;
+           color:white;
+        }
+
+        .centerBody
+        {
+            width:100%;
+            
+            background-color:transparent;
+            overflow: auto;
+        }
+    </style>
+    <script type="text/javascript" src="/Scripts/tinymce/tiny_mce.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $('document').ready(function () {
+            $('#butMenuPartageCours').mouseenter(function () {
+               // releaseAll();
+               // $(this).attr('src', '/img/Shared/menu/partageCoursHover.png');
+            });
+            $('#butMenuPartageCours').mouseleave(function () {
+               // releaseAll();
+            });
+            $('#butMenuPartageCours').click(function () {
+               // alert("la");
+               // releaseAll();
+                $(this).attr('src', '/img/Shared/menu/partageCoursSelected.png');
+            });
+            $('#butMenuColocLog').mouseenter(function () {
+               // releaseAll();
+                //$(this).attr('src', '/img/Shared/menu/logColocHover.png');
+            });
+            $('#butMenuColocLog').mouseleave(function () {
+                //releaseAll();
+            });
+            $('#butMenuCovoiturage').mouseenter(function () {
+                //releaseAll();
+                //$(this).attr('src', '/img/Shared/menu/covoiturageHover.png');
+            });
+            $('#butMenuCovoiturage').mouseleave(function () {
+                //releaseAll();
+            });
+
+        });
+        function releaseAll() {
+            $('#butMenuPartageCours').attr('src', '/img/Shared/menu/partageCoursReleased.png');
+            $('#butMenuColocLog').attr('src', '/img/Shared/menu/logColocReleased.png');
+            $('#butMenuCovoiturage').attr('src', '/img/Shared/menu/covoiturageReleased.png');
+        }
+    </script>   
+</head>
+
+<body style="margin:0px;background-image:url('../img/Shared/back.jpg')">
+    @*if logged*@
+    @if (true)
+    {
+        <div class="centerColumnBody">
+            <div class="centerHead">
+                <div style="float:left;width:400px;">
+                    <div style="width:auto; height:100px;background-color:green">LOGO/ANIMATION</div>
+                   
+                    <div style="width:auto; height:20px;background-color:red">
+                        USERNAME
+                        +
+                        DATE ?
+                    </div>
+                </div>
+               
+           
+                
+                <div style="float:left;width:500px;">
+                    <span style="margin-left:10px;">
+                        <a href="@Url.Action("Index","Cours")">
+                            <img src="~/img/Shared/menu/partageCoursReleased.png" alt="Partage de cours" id="butMenuPartageCours" />
+                        </a>
+                    </span>
+                    <span style="margin-left:10px;">
+                         <img src="~/img/Shared/menu/logColocReleased.png" alt="Logement Colocation" id="butMenuColocLog"/>
+                    </span>
+                    <span style="margin-left:10px;">
+                        <img src="~/img/Shared/menu/covoiturageReleased.png" alt="Covoiturage" id="butMenuCovoiturage"/>
+                    </span>
+                    <br />
+                </div>
+            </div>
+
+            <div class="centerHeadMenu">
+                <div class="centerHeadMenuContent">
+                    
+                        
+                       
+                        
+                </div>
+            </div>
+            <div class="centerBody">
+                 @RenderBody()
+            </div>
+           
+        </div>
+       
+    }
+    else
+    {
+        @RenderBody()
+    }
+    
+    @*ifNoLogged*@
+    
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Index"; 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style type="text/css">
+    .homeTop
+    {
+        background-color:red;
+    }
+    .homeBody
+    {
+
+    }
+
+</style>
+<div class="hometop">
+
+</div>
+
+<div class="homeBody">
+    Utilisateurs:<br />
+    <ul>
+        <li>@Html.ActionLink("Enregistrement nouvel utilisateur", "Register", "Account")</li>
+        <li>@Html.ActionLink("Connexion utilisateur", "Connect", "Account")</li>
+        <li>@Html.ActionLink("Voir mon profil","Profil","Account")</li>
+     </ul>
+    Partage de cours:<br />
+    <ul>
+        <li>@Html.ActionLink("Creation de cours", "DocEditor", "Cours")</li>
+        <li>@Html.ActionLink("Espace pers cours", "Private", "Cours")</li>
+        <li>@Html.ActionLink("Parcourir cours", "Browse", "Cours")</li>
+        <li>@Html.ActionLink("Display Test Base de Donnée", "Index", "BaseDeDonneesTest")</li>
+        <li></li>
+    </ul>
+    Logement:<br />
+    <ul>
+      @*  <li>@Html.ActionLink("Creation annonce", "DeposerAnnonceLogement", "Logement")</li>
+        <li>@Html.ActionLink("Annonces Favorites", "Favoris", "Logement")</li>*@
+        <li>@Html.ActionLink("Nouvelle annonce Colocation","NouvelleAnnonceColoc","Logement")</li>
+        <li></li>
+    </ul>
+
+    
+
+    
+</div>
+<div class="homeBottom">
+
+</div>
+@*@Html.Partial("UnLogged/IndexUnlogged_Partial");*@
+
+@*<h2>Index</h2>
+
+@Html.ActionLink("Document Editor", "Index", "Partage/DocEditor");
+<br />
+@Html.ActionLink("Schema Editor", "Index", "Partage/SchemaEditor");*@ 

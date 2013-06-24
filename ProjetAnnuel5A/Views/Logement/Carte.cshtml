@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Carte";
+}
+<script src="http://openlayers.org/api/OpenLayers.js" charset="utf-8"></script>
+
+ <script type="text/javascript">
+     $('document').ready(function () {
+         init();
+
+         $('#citySearch').keypress(function (e) {
+             if (e.which == 13) {
+                 $('#searchLogt').click();
+             }
+         });
+
+         $('#searchLogt').click(function () {
+             alert('search');
+             //TODO RECHERCHE + KML
+         });
+     });
+     function init() {
+         var map, ol_wms;     // (1) instanciation du constructeur
+         map = new OpenLayers.Map('map');
+         // (2) Choix des couches
+         var ol_wms = new OpenLayers.Layer.OSM();
+         // (3) ajout des couches a la carte
+         map.addLayers([ol_wms]);
+         //On zoom au max
+         map.zoomToMaxExtent();
+         map.setCenter(null,7);
+        // map.addControl(new OpenLayers.Control.PanZoomBar());
+         //map.addControl(new OpenLayers.Control.MouseToolbar());
+         //map.addControl(new OpenLayers.Control.LayerSwitcher({ 'ascending': false }));
+         //map.addControl(new OpenLayers.Control.Permalink());
+         //map.addControl(new OpenLayers.Control.Permalink('permalink'));
+         //map.addControl(new OpenLayers.Control.MousePosition());
+
+         //map.addControl(new OpenLayers.Control.KeyboardDefaults());
+     }
+  </script>  
+
+<div style="background-color:#fff;border-bottom:2px solid #6A96AA;padding:10px;text-align:center">
+    <span style="padding-left:10px;padding-right:10px">Ville:</span><input type="text" id="citySearch" style="border: 1px solid #6A96AA;width: 500px;height: 20px;"/>
+     <img src="~/img/icons/32x32/jumelles.png" alt="Rechercher" style="vertical-align:bottom;cursor:pointer" id="searchLogt"/>
+</div>
+<div id="map" style="width:100%; height:800px;border-bottom:2px solid #6A96AA"></div>  

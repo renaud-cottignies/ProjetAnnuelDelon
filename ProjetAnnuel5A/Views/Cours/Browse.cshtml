@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Browse";
+    ViewBag.TitleOnPage = "Liste des Thèmes";
+}
+<style type="text/css">
+    .contentTheme
+    {
+        width:300px;
+        border:1px solid black;
+        margin:13px;
+        float: left;
+    }
+</style>
+
+<div class="bannerTopContentGeneral">
+    <div class="bannerTopContentRondille">
+         <img src="~/img/icons/64x64/bibliotheque-icone.png" style="float:left;padding-right:10px" />
+    </div>
+    <div class="bannerTopContentTitlePartLeft">
+    </div>
+    <div class="bannerTopContentTitleMiddle">
+        <div style="padding:10px">
+            <span class="grandTitreBulleHaut">Partage de cours</span><br />
+            <span class="sousTitreBulleHaut">@ViewBag.TitleOnPage</span> 
+        </div>
+       
+    </div>
+    <div class="bannerTopContentTitlePartRight">
+    </div>
+</div >
+
+<div style="background-color:#FFF;overflow:auto;width:auto">
+  
+
+    @foreach (var theme in ViewBag.listThemes)
+    {
+   
+        <div class="contentTheme">
+            <img src="@theme.iconUrl" alt=" @theme.nom"  style="float:left;height:90px;width:90px"/>
+            <div style="float:left;padding:10px">
+                <div style="color:#6A96AA;font-size:1.5em;width:190px"> @theme.nom</div>
+                 Nombre de cours: @theme.nombreDeCours<br />
+                <span style="background-color: #6A96AA ;color:#FFF;padding:2px;cursor:pointer;margin-top:5px">@Html.ActionLink("Voir les cours", "List", new { themeID = @theme.themeID })</span>
+            </div>
+        </div>
+    }
+
+
+</div>
+
+@Html.Partial("Menu/Menu")
